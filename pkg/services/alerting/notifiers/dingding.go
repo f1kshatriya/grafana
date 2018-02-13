@@ -6,6 +6,7 @@ import (
 	"github.com/grafana/grafana/pkg/log"
 	m "github.com/grafana/grafana/pkg/models"
 	"github.com/grafana/grafana/pkg/services/alerting"
+	"fmt"
 )
 
 func init() {
@@ -74,6 +75,8 @@ func (this *DingDingNotifier) Notify(evalContext *alerting.EvalContext) error {
 
 	if err != nil {
 		this.log.Error("Failed to create Json data", "error", err, "dingding", this.Name)
+		//返回错误，解析json报错继续执行 body, _ := bodyJSON.MarshalJSON() 将报空指针异常，哈哈哈
+		return fmt.Errorf("Failed to create Json data", "error", err, "dingding", this.Name)
 	}
 
 	body, _ := bodyJSON.MarshalJSON()
